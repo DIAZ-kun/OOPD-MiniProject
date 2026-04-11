@@ -53,6 +53,10 @@ public class Passenger {
         this.ticketHistory.add(ticket);
     }
 
+    public List<Ticket> getTicketHistory() {
+        return new ArrayList<>(ticketHistory);
+    }
+
     public void displayHistory() {
         if (ticketHistory.isEmpty()) {
             System.out.println("No booking history found.");

@@ -3,6 +3,7 @@ package operator;
 import model.Ticket;
 import registry.TicketRegistry;
 import enums.QRStatus;
+import java.time.LocalDateTime;
 
 public class RelianceOperator implements MetroOperator {
     @Override
@@ -30,10 +31,12 @@ public class RelianceOperator implements MetroOperator {
 
         if (scanCount == 1) {
             t.setRelianceStatus(QRStatus.ENTERED);
+            t.setEntryTime(LocalDateTime.now());
             System.out.println("> Entry scan accepted. Status set to ENTERED.");
             return true;
         } else if (scanCount == 2) {
             t.setRelianceStatus(QRStatus.USED);
+            t.setExitTime(LocalDateTime.now());
             System.out.println("> Exit scan accepted. Status set to USED.");
             return true;
         } else {

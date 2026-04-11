@@ -1,8 +1,12 @@
 package model;
 
 import enums.QRStatus;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class Ticket {
+    private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+
     private String passengerName;
     private String operatorType;
     private String source;
@@ -14,6 +18,9 @@ public class Ticket {
     private QRStatus relianceStatus;
     private int mmrdaScanCount;
     private int relianceScanCount;
+    private String bookingTime;
+    private String entryTime;
+    private String exitTime;
 
     public Ticket(String passengerName, String operatorType, String source, String intermediate, String destination, double fare, String qrCode) {
         this.passengerName = passengerName;
@@ -27,6 +34,9 @@ public class Ticket {
         this.relianceStatus = null;
         this.mmrdaScanCount = 0;
         this.relianceScanCount = 0;
+        this.bookingTime = LocalDateTime.now().format(FORMATTER);
+        this.entryTime = "N/A";
+        this.exitTime = "N/A";
 
         if (operatorType.equals("MMRDA")) {
             this.mmrdaStatus = QRStatus.CREATED;
@@ -57,6 +67,11 @@ public class Ticket {
     public String getDestination() { return destination; }
     public double getFare() { return fare; }
     public String getOperatorType() { return operatorType; }
+    public String getBookingTime() { return bookingTime; }
+    public String getEntryTime() { return entryTime; }
+    public String getExitTime() { return exitTime; }
+    public void setEntryTime(LocalDateTime entryTime) { this.entryTime = entryTime.format(FORMATTER); }
+    public void setExitTime(LocalDateTime exitTime) { this.exitTime = exitTime.format(FORMATTER); }
 
     public boolean supportsOperator(String operatorName) {
         if (operatorName.equals("MMRDA")) {
@@ -145,6 +160,9 @@ public class Ticket {
             "MMRDA     : %s\n" +
             "Reliance  : %s\n" +
             "QR Code   : %s\n" +
+            "Booking   : %s\n" +
+            "Entry     : %s\n" +
+            "Exit      : %s\n" +
             "====================================",
             passengerName,
             operatorType,
@@ -154,7 +172,10 @@ public class Ticket {
             fare,
             (mmrdaStatus == null ? "N/A" : mmrdaStatus),
             (relianceStatus == null ? "N/A" : relianceStatus),
-            qrCode
+            qrCode,
+            bookingTime,
+            entryTime,
+            exitTime
         );
     }
 }
