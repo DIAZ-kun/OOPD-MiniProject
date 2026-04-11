@@ -1,5 +1,9 @@
 package enums;
 
 public enum QRStatus {
-    ACTIVE, USED, EXPIRED
+    CREATED,
+    ENTERED,
+    EXITED,
+    USED,
+    EXPIRED
 }

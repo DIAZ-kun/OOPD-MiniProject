@@ -9,8 +9,11 @@ public class Ticket {
     private String intermediate;
     private String destination;
     private double fare;
-    private QRStatus status;
     private String qrCode;
+    private QRStatus mmrdaStatus;
+    private QRStatus relianceStatus;
+    private int mmrdaScanCount;
+    private int relianceScanCount;
 
     public Ticket(String passengerName, String operatorType, String source, String intermediate, String destination, double fare, String qrCode) {
         this.passengerName = passengerName;
@@ -20,17 +23,112 @@ public class Ticket {
         this.destination = destination;
         this.fare = fare;
         this.qrCode = qrCode;
-        this.status = QRStatus.ACTIVE;
+        this.mmrdaStatus = null;
+        this.relianceStatus = null;
+        this.mmrdaScanCount = 0;
+        this.relianceScanCount = 0;
+
+        if (operatorType.equals("MMRDA")) {
+            this.mmrdaStatus = QRStatus.CREATED;
+        } else if (operatorType.equals("Reliance")) {
+            this.relianceStatus = QRStatus.CREATED;
+        } else if (operatorType.equals("Interchange-MMRDA-Reliance") || operatorType.equals("Interchange-Reliance-MMRDA")) {
+            this.mmrdaStatus = QRStatus.CREATED;
+            this.relianceStatus = QRStatus.CREATED;
+        }
     }
 
     public String getQrCode() { return qrCode; }
-    public QRStatus getStatus() { return status; }
-    public void setStatus(QRStatus status) { this.status = status; }
+
+    public QRStatus getMMRDAStatus() { return mmrdaStatus; }
+    public QRStatus getRelianceStatus() { return relianceStatus; }
+
+    public void setMMRDAStatus(QRStatus status) { this.mmrdaStatus = status; }
+    public void setRelianceStatus(QRStatus status) { this.relianceStatus = status; }
+
+    public int getMMRDAScanCount() { return mmrdaScanCount; }
+    public int getRelianceScanCount() { return relianceScanCount; }
+
+    public void incrementMMRDAScanCount() { this.mmrdaScanCount++; }
+    public void incrementRelianceScanCount() { this.relianceScanCount++; }
+
     public String getPassengerName() { return passengerName; }
     public String getSource() { return source; }
     public String getDestination() { return destination; }
     public double getFare() { return fare; }
     public String getOperatorType() { return operatorType; }
+
+    public boolean supportsOperator(String operatorName) {
+        if (operatorName.equals("MMRDA")) {
+            return (operatorType.equals("MMRDA") || operatorType.equals("Interchange-MMRDA-Reliance") || operatorType.equals("Interchange-Reliance-MMRDA"));
+        }
+        if (operatorName.equals("Reliance")) {
+            return (operatorType.equals("Reliance") || operatorType.equals("Interchange-MMRDA-Reliance") || operatorType.equals("Interchange-Reliance-MMRDA"));
+        }
+        return false;
+    }
+
+    public String getSegmentSource(String operatorName) {
+        if (operatorName.equals("MMRDA")) {
+            if (operatorType.equals("MMRDA")) {
+                return source;
+            }
+            if (operatorType.equals("Interchange-MMRDA-Reliance")) {
+                return source;
+            }
+            if (operatorType.equals("Interchange-Reliance-MMRDA")) {
+                return intermediate;
+            }
+        }
+        if (operatorName.equals("Reliance")) {
+            if (operatorType.equals("Reliance")) {
+                return source;
+            }
+            if (operatorType.equals("Interchange-MMRDA-Reliance")) {
+                return intermediate;
+            }
+            if (operatorType.equals("Interchange-Reliance-MMRDA")) {
+                return source;
+            }
+        }
+        return null;
+    }
+
+    public String getSegmentDestination(String operatorName) {
+        if (operatorName.equals("MMRDA")) {
+            if (operatorType.equals("MMRDA")) {
+                return destination;
+            }
+            if (operatorType.equals("Interchange-MMRDA-Reliance")) {
+                return intermediate;
+            }
+            if (operatorType.equals("Interchange-Reliance-MMRDA")) {
+                return destination;
+            }
+        }
+        if (operatorName.equals("Reliance")) {
+            if (operatorType.equals("Reliance")) {
+                return destination;
+            }
+            if (operatorType.equals("Interchange-MMRDA-Reliance")) {
+                return destination;
+            }
+            if (operatorType.equals("Interchange-Reliance-MMRDA")) {
+                return intermediate;
+            }
+        }
+        return null;
+    }
+
+    public QRStatus getStatusForOperator(String operatorName) {
+        if (operatorName.equals("MMRDA")) {
+            return mmrdaStatus;
+        }
+        if (operatorName.equals("Reliance")) {
+            return relianceStatus;
+        }
+        return null;
+    }
 
     @Override
     public String toString() {
@@ -44,12 +142,19 @@ public class Ticket {
             "Transit   : %s\n" +
             "Dest      : %s\n" +
             "Fare      : %.2f INR\n" +
-            "QR Status : %s\n" +
+            "MMRDA     : %s\n" +
+            "Reliance  : %s\n" +
             "QR Code   : %s\n" +
             "====================================",
-            passengerName, operatorType, source, 
-            (intermediate == null ? "N/A" : intermediate), 
-            destination, fare, status, qrCode
+            passengerName,
+            operatorType,
+            source,
+            (intermediate == null ? "N/A" : intermediate),
+            destination,
+            fare,
+            (mmrdaStatus == null ? "N/A" : mmrdaStatus),
+            (relianceStatus == null ? "N/A" : relianceStatus),
+            qrCode
         );
     }
 }

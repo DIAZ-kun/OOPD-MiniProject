@@ -185,7 +185,6 @@ public class Main {
                 dest = relianceStations.get(destIdx);
                 fare = Math.abs(srcIdx - destIdx) * 10;
             } else if ("3".equals(opChoice)) {
-                operatorType = "Interchange (Unified)";
                 intermediate = "Gundavali";
                 
                 System.out.println("\nAre you starting at:");
@@ -195,6 +194,7 @@ public class Main {
                 String startLine = scanner.nextLine();
                 
                 if ("1".equals(startLine)) {
+                    operatorType = "Interchange-MMRDA-Reliance";
                     System.out.println("\nSelect Source from MMRDA Stations:");
                     for(int i=0; i<mmrdaStations.size(); i++) {
                         System.out.println((i+1) + ". " + mmrdaStations.get(i));
@@ -218,6 +218,7 @@ public class Main {
                     fare = (dist1 + dist2) * 10;
                     
                 } else if ("2".equals(startLine)) {
+                    operatorType = "Interchange-Reliance-MMRDA";
                     System.out.println("\nSelect Source from Reliance Stations:");
                     for(int i=0; i<relianceStations.size(); i++) {
                         System.out.println((i+1) + ". " + relianceStations.get(i));
@@ -310,7 +311,7 @@ public class Main {
                     Ticket t = TicketRegistry.getTicket(qrStr);
                     if (t != null) {
                         UnifiedQRCode qrObj;
-                        if (t.getOperatorType().contains("Reliance")) {
+                        if (operatorInstance.getOperatorName().equals("Reliance")) {
                            qrObj = new RelianceQRCode(qrStr);
                         } else {
                            qrObj = new MMRDAQRCode(qrStr);
