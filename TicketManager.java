@@ -1,7 +1,7 @@
-package manager;
+//package manager;
 
-import metro.MetroSystem;
-import qr.QRCode;
+//import metro.MetroSystem;
+//import qr.QRCode;
 
 public class TicketManager {
 

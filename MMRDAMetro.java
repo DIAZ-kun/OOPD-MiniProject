@@ -1,8 +1,7 @@
-// package metro;
+//package metro;
 
-// import qr.QRCode;
-
-// import exceptions.*;
+//import qr.QRCode;
+//import exceptions.*;
 
 public class MMRDAMetro extends MetroSystem {
 
@@ -17,20 +16,24 @@ public class MMRDAMetro extends MetroSystem {
     }
 
     @Override
-    public void processPayment(QRCode qr) {
-
-    double fare = 30;
-
-    if (qr == null) {
-        throw new RuntimeException("QR Code is null");
+    public void validate(QRCode qr) {
+        if (qr == null) {
+            throw new RuntimeException("Invalid QR Code");
+        }
+        System.out.println("QR Validated Successfully ✔");
     }
 
-    if (qr.getBalance() < fare) {
-        throw new RuntimeException("Insufficient Balance in MMRDA");
-    }
+    @Override
+    public void processPayment(QRCode qr) throws InsufficientBalanceException {
 
-    qr.deductBalance(fare);
-    System.out.println("Fare Deducted: ₹" + fare);
-    System.out.println("Remaining Balance: ₹" + qr.getBalance());
+        double fare = 30;
+
+        if (qr.getBalance() < fare) {
+            throw new InsufficientBalanceException("Low balance in MMRDA Metro");
+        }
+
+        qr.deductBalance(fare);
+        System.out.println("Fare Deducted: ₹" + fare);
+        System.out.println("Remaining Balance: ₹" + qr.getBalance());
     }
 }

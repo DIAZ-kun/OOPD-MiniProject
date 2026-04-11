@@ -1,6 +1,7 @@
-// package metro;
+//package metro;
 
-// import qr.QRCode;
+//import qr.QRCode;
+//import exceptions.*;
 
 public class RelianceMetro extends MetroSystem {
 
@@ -14,25 +15,26 @@ public class RelianceMetro extends MetroSystem {
         System.out.println("Scanning QR for Reliance...");
     }
 
-    // import exceptions.*;
+    @Override
+    public void validate(QRCode qr) {
+        if (qr == null) {
+            throw new RuntimeException("Invalid QR Code");
+        }
+        System.out.println("QR Validated Successfully ✔");
+    }
 
     @Override
-    public void processPayment(QRCode qr) {
+    public void processPayment(QRCode qr) throws InsufficientBalanceException {
 
-    double fare = 40;
+        double fare = 40; // peak pricing
 
-    if (qr == null) {
-        throw new RuntimeException("QR Code is null");
+        if (qr.getBalance() < fare) {
+            throw new InsufficientBalanceException("Low balance in Reliance Metro");
+        }
+
+        qr.deductBalance(fare);
+        System.out.println("⚡ Peak Pricing Applied");
+        System.out.println("Fare Deducted: ₹" + fare);
+        System.out.println("Remaining Balance: ₹" + qr.getBalance());
     }
-
-    if (qr.getBalance() < fare) {
-        throw new RuntimeException("Insufficient Balance in Reliance");
-    }
-
-    qr.deductBalance(fare);
-    System.out.println("⚡ Peak Pricing Applied");
-    System.out.println("Fare Deducted: ₹" + fare);
-    System.out.println("Remaining Balance: ₹" + qr.getBalance());
-    }
-
 }

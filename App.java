@@ -1,7 +1,10 @@
+//package main;
+
 import java.util.Scanner;
 
 //import qr.QRCode;
 //import metro.*;
+//import manager.TicketManager;
 
 public class App {
 
@@ -9,28 +12,25 @@ public class App {
 
         Scanner sc = new Scanner(System.in);
 
-        // Create a QR user
-        QRCode qr = new QRCode("Z123", 000);
-
-        MetroSystem metro = null;
+        QRCode qr = new QRCode("Z123", 200);
+        TicketManager manager = new TicketManager();
 
         while (true) {
 
             System.out.println("\n===== PolyQR: Unified Metro System =====");
             System.out.println("1. MMRDA Metro");
             System.out.println("2. Reliance Metro");
-            System.out.println("3. Exit");
-            System.out.print("Choose Metro: ");
+            System.out.println("3. Recharge QR");
+            System.out.println("4. Show QR Details");
+            System.out.println("5. Exit");
+            System.out.print("Choose Option: ");
 
             int choice = sc.nextInt();
 
-            if (choice == 3) {
-                System.out.println("Exiting...");
-                break;
-            }
+            MetroSystem metro = null;
 
-            // 🔥 Polymorphism happens here
             switch (choice) {
+
                 case 1:
                     metro = new MMRDAMetro();
                     break;
@@ -39,37 +39,27 @@ public class App {
                     metro = new RelianceMetro();
                     break;
 
+                case 3:
+                    System.out.print("Enter recharge amount: ");
+                    double amt = sc.nextDouble();
+                    qr.recharge(amt);
+                    continue;
+
+                case 4:
+                    qr.display();
+                    continue;
+
+                case 5:
+                    System.out.println("Exiting...");
+                    sc.close();
+                    return;
+
                 default:
                     System.out.println("Invalid choice!");
                     continue;
             }
 
-            System.out.println("\n1. Scan & Pay");
-            System.out.println("2. Show QR Details");
-            System.out.print("Choose Action: ");
-            int action = sc.nextInt();
-
-            switch (action) {
-
-                case 1:
-                    try {
-                        metro.scan(qr);
-                        metro.processPayment(qr);
-                    } catch (Exception e) {
-                        System.out.println("❌ Error: " + e.getMessage());
-                    }
-
-                    break;
-
-                case 2:
-                    qr.display();
-                    break;
-
-                default:
-                    System.out.println("Invalid action!");
-            }
+            manager.processJourney(metro, qr);
         }
-
-        sc.close();
     }
 }

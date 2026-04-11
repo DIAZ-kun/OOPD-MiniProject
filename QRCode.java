@@ -22,8 +22,13 @@ public class QRCode {
         balance -= amount;
     }
 
+    public void recharge(double amount) {
+        balance += amount;
+        System.out.println("✅ Recharged ₹" + amount);
+    }
+
     public void display() {
         System.out.println("User ID: " + userId);
-        System.out.println("Balance: " + balance);
+        System.out.println("Balance: ₹" + balance);
     }
 }

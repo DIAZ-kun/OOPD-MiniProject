@@ -1,21 +1,18 @@
-// package metro;
+//package metro;
 
-// import qr.QRCode;
+//import qr.QRCode;
+//import interfaces.*;
 
-public abstract class MetroSystem {
+public abstract class MetroSystem implements Scannable, Validatable {
 
     protected String metroName;
 
-    // Constructor
     public MetroSystem(String metroName) {
         this.metroName = metroName;
     }
 
-    // Abstract methods (no body)
-    public abstract void scan(QRCode qr);
-    public abstract void processPayment(QRCode qr);
+    public abstract void processPayment(QRCode qr) throws Exception;
 
-    // Common method (same for all)
     public void showMetroName() {
         System.out.println("\n[" + metroName + "]");
     }
