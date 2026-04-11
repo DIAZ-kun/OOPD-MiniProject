@@ -1,10 +1,8 @@
+import exception.InsufficientBalanceException;
+import java.util.*;
 import model.*;
 import operator.*;
 import registry.*;
-import enums.QRStatus;
-import exception.InsufficientBalanceException;
-
-import java.util.*;
 
 public class Main {
     private static Scanner scanner = new Scanner(System.in);
