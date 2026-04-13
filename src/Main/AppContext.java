@@ -1,3 +1,4 @@
+package Main;
 import model.Passenger;
 import operator.MetroOperator;
 import javax.swing.*;

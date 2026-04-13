@@ -1,7 +1,9 @@
+package Main;
 import model.*;
 import registry.*;
 import exception.InsufficientBalanceException;
 import javax.swing.*;
+
 import java.awt.*;
 
 public class PassengerService {

@@ -1,5 +1,7 @@
+package Main;
 import javax.imageio.ImageIO;
 import javax.swing.*;
+
 import java.awt.BorderLayout;
 import java.awt.Graphics;
 import java.awt.Image;
