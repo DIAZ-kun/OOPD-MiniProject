@@ -1,6 +1,6 @@
 # Mumbai Metro Ticketing System
 
-This Java console application simulates a simplified Mumbai Metro ticketing system with a unified QR-code-based ticket booking and validation workflow.
+This Java console application simulates a simplified Mumbai Metro ticketing system with a unified QR-code-based ticket booking and validation workflow..
 
 ## What the project does
 
